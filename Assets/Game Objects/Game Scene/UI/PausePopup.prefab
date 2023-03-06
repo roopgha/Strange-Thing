@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5696778584068326999}
   - component: {fileID: 4686238272072987901}
   m_Layer: 5
-  m_Name: PausePopup
+  m_Name: pausepopup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
