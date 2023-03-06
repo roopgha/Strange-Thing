@@ -6,7 +6,8 @@ using TMPro;
 
 public class UITextTypingEffect : MonoBehaviour
 {
-    TextMeshProUGUI storyText;
+    [SerializeField] private GameObject textWindow;
+    [SerializeField] private TextMeshProUGUI storyText;
     List<string> story = new List<string>();
 
     int printState = 0;
@@ -20,8 +21,12 @@ public class UITextTypingEffect : MonoBehaviour
         {
             AddStroyText(filename,story);
         }
-        storyText = GetComponent<TextMeshProUGUI> ();
 
+        if(!GameManager.isUserSeeStory)
+        {
+            textWindow.SetActive(true);
+            print("activate textWindow");
+        }
         // foreach(string text in story)
         // {
         //     PlayText(text);
@@ -30,21 +35,35 @@ public class UITextTypingEffect : MonoBehaviour
 
     void Update()
     {
-        if(storyCount >= story.Count) return;
-        if(printState == 0)
+        if(GameManager.isUserSeeStory == false)
         {
-            StartCoroutine(PlayText(story[storyCount],0.5f,1));
-            printState = 1;
-        }
-        else if(printState == 2)
-        {
-            if(Input.GetMouseButtonDown(0))
+            if(storyCount >= story.Count)
             {
-                storyCount++;
-                printState = 0;
-            }
-        }
+                if(Input.GetMouseButtonDown(0))
+                {
+                    textWindow.SetActive(false);
+                    GameManager.isUserSeeStory = true;
+                }
 
+                return;
+            }
+
+            if(printState == 0)
+            {
+                StartCoroutine(PlayText(story[storyCount],0.5f,1));
+                printState = 1;
+            }
+
+            else if(printState == 2)
+            {
+                if(Input.GetMouseButtonDown(0))
+                {
+                    storyCount++;
+                    printState = 0;
+                }
+            }
+
+        }
     }
 
 
@@ -58,7 +77,6 @@ public class UITextTypingEffect : MonoBehaviour
         while((line = streamReader.ReadLine()) != null)
         {
             story.Add(line);
-            print(line);
         }
     }
 
