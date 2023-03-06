@@ -6,22 +6,92 @@ using TMPro;
 
 public class UITextTypingEffect : MonoBehaviour
 {
-    TextMeshProUGUI txt;
-    string story;
+    TextMeshProUGUI storyText;
+    List<string> story = new List<string>();
 
-    void Awake(){
-        txt = GetComponent<TextMeshProUGUI> ();
-        story = txt.text;
-        txt.text = "";
+    int printState = 0;
 
-        StartCoroutine ("PlayText");
+    int storyCount = 0;
+
+    void Start(){
+        string[] filenames = {"story1.txt"};
+
+        foreach(string filename in filenames)
+        {
+            AddStroyText(filename,story);
+        }
+        storyText = GetComponent<TextMeshProUGUI> ();
+
+        // foreach(string text in story)
+        // {
+        //     PlayText(text);
+        // }
     }
 
-    IEnumerator PlayText()
+    void Update()
     {
-        foreach(char c in story){
-            txt.text += c;
-            yield return new WaitForSeconds (0.125f);
+        if(storyCount >= story.Count) return;
+        if(printState == 0)
+        {
+            StartCoroutine(PlayText(story[storyCount],0.5f,1));
+            printState = 1;
         }
+        else if(printState == 2)
+        {
+            if(Input.GetMouseButtonDown(0))
+            {
+                storyCount++;
+                printState = 0;
+            }
+        }
+
+    }
+
+
+    void AddStroyText(string filename, List<string> story)
+    {
+        string path = System.IO.Path.Combine(Application.streamingAssetsPath, filename);
+        System.IO.FileStream fileStream = new System.IO.FileStream(path,System.IO.FileMode.Open);
+        System.IO.StreamReader streamReader = new System.IO.StreamReader(fileStream);
+        
+        string line = null;
+        while((line = streamReader.ReadLine()) != null)
+        {
+            story.Add(line);
+            print(line);
+        }
+    }
+
+    IEnumerator PlayText(string story, float printSkipDelay, float afterPrintSkipDelay)
+    {
+        storyText.text = "";
+
+        float countTime = 0;
+        float countSkipTIme = 0;
+        foreach(char c in story){
+            storyText.text += c;
+
+            while(countTime<=0.125f)
+            {
+                countTime+=Time.deltaTime;
+                countSkipTIme+=Time.deltaTime;
+                if(countSkipTIme >= printSkipDelay)
+                {
+                    if(Input.GetMouseButtonDown(0))
+                    {
+                        goto BREAK;
+                    }
+                }
+                yield return null;
+            }
+            countTime = 0;
+        }
+        BREAK:
+
+        storyText.text = story;
+        
+        yield return new WaitForSeconds(afterPrintSkipDelay);
+
+        printState = 2;
     }
 }
