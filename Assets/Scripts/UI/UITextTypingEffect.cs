@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UITextTypingEffect : MonoBehaviour
 {
-    Text txt;
+    TextMeshProUGUI txt;
     string story;
 
     void Awake(){
-        txt = GetComponent<Text> ();
+        txt = GetComponent<TextMeshProUGUI> ();
         story = txt.text;
         txt.text = "";
 
