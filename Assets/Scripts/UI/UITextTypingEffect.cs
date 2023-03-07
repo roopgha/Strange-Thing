@@ -1,26 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 
 public class UITextTypingEffect : MonoBehaviour
 {
     [SerializeField] private GameObject textWindow;
     [SerializeField] private TextMeshProUGUI storyText;
+    [SerializeField] private TextMeshProUGUI interactionText;
+
     List<string> story = new List<string>();
+    List<string> interaction = new List<string>(); 
 
     int printState = 0;
 
     int storyCount = 0;
 
     void Start(){
-        string[] filenames = {"story1.txt"};
-
-        foreach(string filename in filenames)
-        {
-            AddStroyText(filename,story);
-        }
+        
+        AddStroyText("story1.txt", story);
+        AddStroyText("interaction.txt", interaction);
 
         if(!GameManager.isUserSeeStory)
         {
@@ -33,37 +33,36 @@ public class UITextTypingEffect : MonoBehaviour
         // }
     }
 
-    void Update()
+    protected virtual void Update()
     {
-        if(GameManager.isUserSeeStory == false)
+        if(GameManager.isUserSeeStory) return;
+        
+        if(storyCount >= story.Count)
         {
-            if(storyCount >= story.Count)
+            if(Input.GetMouseButtonDown(0))
             {
-                if(Input.GetMouseButtonDown(0))
-                {
-                    textWindow.SetActive(false);
-                    GameManager.isUserSeeStory = true;
-                }
-
-                return;
+                textWindow.SetActive(false);
+                GameManager.isUserSeeStory = true;
             }
 
-            if(printState == 0)
-            {
-                StartCoroutine(PlayText(story[storyCount],0.5f,1));
-                printState = 1;
-            }
-
-            else if(printState == 2)
-            {
-                if(Input.GetMouseButtonDown(0))
-                {
-                    storyCount++;
-                    printState = 0;
-                }
-            }
-
+            return;
         }
+
+        if(printState == 0)
+        {
+            StartCoroutine(PlayText(story[storyCount],0.5f,1));
+            printState = 1;
+        }
+
+        else if(printState == 2)
+        {
+            if(Input.GetMouseButtonDown(0))
+            {
+                storyCount++;
+                printState = 0;
+            }
+        }
+        
     }
 
 
