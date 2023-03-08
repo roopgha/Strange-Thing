@@ -3,28 +3,46 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class UITextTypingEffect : MonoBehaviour
-{
-    [SerializeField] private GameObject textWindow;
-    [SerializeField] private TextMeshProUGUI storyText;
+{   
+    [SerializeField] private GameObject interactionTextWindow;
+    [SerializeField] private GameObject[] storyTextWindows;
+    [SerializeField] private TextMeshProUGUI[] storyTexts;
     [SerializeField] private TextMeshProUGUI interactionText;
 
     List<string> story = new List<string>();
     List<string> interaction = new List<string>(); 
 
+    bool isOnClickDoor;
+
     int printState = 0;
 
     int storyCount = 0;
 
-    void Start(){
+    void Awake()
+    {
+        UITextTypingEffect[] textTypingEffects = FindObjectsOfType<UITextTypingEffect>();
+        if(textTypingEffects.Length == 1)
+        {
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
+    void Start()
+    {
         
         AddStroyText("story1.txt", story);
         AddStroyText("interaction.txt", interaction);
 
         if(!GameManager.isUserSeeStory)
         {
-            textWindow.SetActive(true);
+            storyTextWindows[GameManager.stageNumber].SetActive(true);
             print("activate textWindow");
         }
         // foreach(string text in story)
@@ -35,22 +53,68 @@ public class UITextTypingEffect : MonoBehaviour
 
     protected virtual void Update()
     {
-        if(GameManager.isUserSeeStory) return;
-        
-        if(storyCount >= story.Count)
+        print(printState);
+        if(GameManager.isUserSeeStory)
         {
             if(Input.GetMouseButtonDown(0))
             {
-                textWindow.SetActive(false);
-                GameManager.isUserSeeStory = true;
+                storyTextWindows[GameManager.stageNumber].SetActive(false);
             }
+        }
+        PlayTypingEffect(story, storyTexts[GameManager.stageNumber]);
+        if(isOnClickDoor)
+        {
+            interactionTextWindow.SetActive(true);
+            if(GameManager.isUserHaveKey == true)
+            {
+                PlayTypingEffect(interaction[1], interactionText, interactionTextWindow);
+            }
+            else
+            {
+                PlayTypingEffect(interaction[0], interactionText, interactionTextWindow);
+            }
+        }
+    }
 
+    public void PlayTypingEffect(string text, TextMeshProUGUI textObject, GameObject interactionTextWindow)
+    {
+        if(printState == 0)
+        {
+            StartCoroutine(PlayText(textObject,text,0.5f,1));
+            printState = 1;
+        }
+        else if(printState == -1)
+        {
+            interactionTextWindow.SetActive(false);
+            printState = 0;
+            isOnClickDoor = false;
+        }
+        else if(printState == 2)
+        {
+            if(Input.GetMouseButtonDown(0))
+            {
+                storyCount++;
+                printState = -1;
+            }
+        }
+        
+    }
+
+    public void PlayTypingEffect(List<string> text, TextMeshProUGUI textObject)
+    {
+        if(isOnClickDoor) return;
+
+        if(storyCount >= text.Count)
+        {    
+            //GameManager.isUserSeeStory = true;
+            storyTextWindows[GameManager.stageNumber].SetActive(false);
+            printState = 0;
             return;
         }
 
         if(printState == 0)
         {
-            StartCoroutine(PlayText(story[storyCount],0.5f,1));
+            StartCoroutine(PlayText(textObject,text[storyCount],0.5f,1));
             printState = 1;
         }
 
@@ -58,6 +122,7 @@ public class UITextTypingEffect : MonoBehaviour
         {
             if(Input.GetMouseButtonDown(0))
             {
+                print("!");
                 storyCount++;
                 printState = 0;
             }
@@ -65,7 +130,10 @@ public class UITextTypingEffect : MonoBehaviour
         
     }
 
-
+    public void OnClickDoor()
+    {
+        isOnClickDoor = true;
+    }
     void AddStroyText(string filename, List<string> story)
     {
         string path = System.IO.Path.Combine(Application.streamingAssetsPath, filename);
@@ -79,14 +147,15 @@ public class UITextTypingEffect : MonoBehaviour
         }
     }
 
-    IEnumerator PlayText(string story, float printSkipDelay, float afterPrintSkipDelay)
+    
+    IEnumerator PlayText(TextMeshProUGUI textObject, string story, float printSkipDelay, float afterPrintSkipDelay)
     {
-        storyText.text = "";
+        textObject.text = "";
 
         float countTime = 0;
         float countSkipTIme = 0;
         foreach(char c in story){
-            storyText.text += c;
+            textObject.text += c;
 
             while(countTime<=0.125f)
             {
@@ -105,7 +174,7 @@ public class UITextTypingEffect : MonoBehaviour
         }
         BREAK:
 
-        storyText.text = story;
+        textObject.text = story;
         
         yield return new WaitForSeconds(afterPrintSkipDelay);
 

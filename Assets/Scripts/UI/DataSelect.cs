@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class DataSelect : MonoBehaviour
 {
     public void ChangeGameScene(){
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("Stage1");
     }
 
     public void ChangeMainScene(){

@@ -7,13 +7,15 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public GameObject[] key;
     public static int interactionNumber;
     public static bool isUserSeeStory = false;
-
+    public static int stageNumber;
     public static bool isUserHaveKey = false;
 
     void Awake()
     {
+        key = GameObject.FindGameObjectsWithTag("key");
         GameManager[] gameManagers = FindObjectsOfType<GameManager>();
         if(gameManagers.Length == 1)
         {
@@ -26,6 +28,11 @@ public class GameManager : MonoBehaviour
     }
     private void Update() 
     {
-        print(isUserSeeStory);
+       
+    }
+
+    public void OnClickKey()
+    {
+
     }
 }
