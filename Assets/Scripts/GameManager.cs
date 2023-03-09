@@ -7,11 +7,13 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject[] key;
+    public static GameObject[] key;
     public static int interactionNumber;
-    public static bool isUserSeeStory = false;
+    public static bool isUserSeeStory;
     public static int stageNumber;
-    public static bool isUserHaveKey = false;
+    public static bool isUserHaveKey;
+    public static bool isOnClickKey;
+    public static bool isOnClickDoor;
 
     void Awake()
     {
@@ -26,13 +28,15 @@ public class GameManager : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
-    private void Update() 
+
+    public void OnClickDoor()
     {
-       
+        isOnClickDoor = true;
     }
 
     public void OnClickKey()
     {
-
+        isOnClickKey = true;
+        GameManager.key[GameManager.stageNumber].SetActive(false);
     }
 }
