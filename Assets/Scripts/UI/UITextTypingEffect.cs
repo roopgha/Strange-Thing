@@ -33,8 +33,7 @@ public class UITextTypingEffect : MonoBehaviour
 
     void Start()
     {
-        
-        AddStroyText("story1.txt", story);
+        AddStroyText("story" + GameManager.stageNumber + ".txt", story);
         AddStroyText("interaction.txt", interaction);
 
         if(!GameManager.isUserSeeStory)
