@@ -1,0 +1,24 @@
+{
+  "name": "com.ycs.unity.tools.doozy-ui",
+  "displayName": "Doozy UI",
+  "version": "23.0.3",
+  "unity": "2023.1",
+  "description": "Doozy UI",
+  "keywords": [
+    "unity",
+    "tools",
+    "doozy"
+  ],
+  "samples": [
+    {
+      "displayName": "Examples",
+      "description": "Doozy Examples",
+      "path": "Samples~/_Examples"
+    }
+  ],
+  "author": "Youcanstar",
+  "dependencies": {
+    "com.unity.inputsystem": "1.6.1",
+    "com.unity.testtools.codecoverage": "1.2.4"
+  }
+}
