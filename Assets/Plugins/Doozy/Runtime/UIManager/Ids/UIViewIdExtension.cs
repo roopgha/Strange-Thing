@@ -37,7 +37,8 @@ namespace Doozy.Runtime.UIManager
 
         public enum Stage1
         {
-            Center
+            Center,
+            Story
         }    
     }
 }

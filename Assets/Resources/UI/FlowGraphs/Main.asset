@@ -49,25 +49,20 @@ MonoBehaviour:
   Passthrough: 1
   ClearGraphHistory: 0
   Position: {x: 461, y: 1}
-  OnEnterShowViews:
-  - Id:
-      Category: Main
-      Name: Loading
-      Custom: 0
-    Mode: 0
+  OnEnterShowViews: []
   OnEnterHideViews:
   - Id:
       Category: Main
       Name: Menu
       Custom: 0
     Mode: 0
-  OnExitShowViews: []
-  OnExitHideViews:
+  OnExitShowViews:
   - Id:
       Category: Main
       Name: Loading
       Custom: 0
     Mode: 0
+  OnExitHideViews: []
   OnEnterHideAllViews: 0
   OnExitHideAllViews: 0
 --- !u!114 &-7033203783168880192
@@ -201,7 +196,7 @@ MonoBehaviour:
   GetSceneBy: 0
   LoadSceneMode: 0
   AllowSceneActivation: 1
-  SceneActivationDelay: 0.2
+  SceneActivationDelay: 1
   SceneBuildIndex: 0
   SceneName: Stage1
   WaitForSceneToLoad: 1

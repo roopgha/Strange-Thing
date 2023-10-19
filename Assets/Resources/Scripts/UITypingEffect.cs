@@ -35,20 +35,17 @@ public class UITypingEffect : MonoBehaviour
         endStory = false;
         while(endStory != true)
         {
-            print("in");
             if (num < length)
             {
-                text.text.Trim();
-                print(story[num]);
-                print(story[num].Length);
                 for (int i = 0; i < story[num].Length; i++)
                 {
                     sb.Append(" ");
                     sb[i] = story[num][i];
                     text.text = sb.ToString();
-                    await UniTask.WaitForSeconds(0.125f);
+                    await UniTask.WaitForSeconds(0.15f);
                 }
-                    
+                await UniTask.WaitForSeconds(1);
+
                 for(int i = story[num].Length - 1; i >= 0; i--)
                 {
                     sb[i] = ' ';
@@ -56,12 +53,12 @@ public class UITypingEffect : MonoBehaviour
                     await UniTask.WaitForSeconds(0.125f);
                 }
                 await UniTask.WaitForSeconds(1);
-                num++;
             }
             else
             {
                 endStory = true;
             }
+            num++;
         }
         await UniTask.Yield();
     }
