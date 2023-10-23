@@ -10,9 +10,12 @@ using UnityEngine;
 
 public partial class GameManager : MonoBehaviour
 {
+    Story storyData = new Story();
+    UserData userData = new UserData();
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
+        userData.isSeeStory[0] = false;
         error = new Error();
         localStory = new Story();
         SetDirectory();

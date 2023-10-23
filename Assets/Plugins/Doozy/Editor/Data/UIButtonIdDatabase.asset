@@ -16,6 +16,20 @@ MonoBehaviour:
     Items:
     - Category: None
       Name: None
+    - Category: Stage1
+      Name: Back
+    - Category: Stage1
+      Name: Center
+    - Category: Stage1
+      Name: Left
+    - Category: Stage1
+      Name: Right
+    - Category: Stage1
+      Name: Room1
+    - Category: Stage1
+      Name: Room2
+    - Category: Stage1
+      Name: Room3
     - Category: UI
       Name: Exit
     - Category: UI

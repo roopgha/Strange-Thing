@@ -22,7 +22,15 @@ MonoBehaviour:
       Name: Menu
     - Category: None
       Name: None
+    - Category: Skip
+      Name: SkipMain
     - Category: Stage1
       Name: Center
+    - Category: Stage1
+      Name: Room1
+    - Category: Stage1
+      Name: Room2
+    - Category: Stage1
+      Name: Room3
     - Category: Stage1
       Name: Story

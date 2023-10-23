@@ -1,35 +1,57 @@
 using Cysharp.Threading.Tasks;
-using System.Drawing.Printing;
-using System.Runtime.InteropServices;
+using NUnit.Framework.Constraints;
+using System;
 using System.Text;
+using System.Threading;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class UITypingEffect : MonoBehaviour
 {
+    GameObject gameCanvas;
+
     TextMeshProUGUI text;
+    
     GameManager.UserData userData;
+
+    GameObject storyWindow;
+
     bool endStory;
+
     string[] story;
 
     private void Awake()
     {
+        gameCanvas = GameObject.Find("GameCanvas");
+
+        gameCanvas.SetActive(false);
+
         userData = new GameManager.UserData();
 
+        storyWindow = GameObject.Find(transform.parent.name);
+
         text = GetComponent<TextMeshProUGUI>();
-        print(userData.stageNumber);
+
         story = GameManager.localStory.story[userData.stageNumber].Split('\n');
     }
 
     private async void Start()
     {
-        await TypingEffect();
+        if (!userData.isSeeStory[userData.stageNumber])
+        {
+            await TypingEffect(story);
+
+            gameCanvas.SetActive(true);
+
+            userData.isSeeStory[userData.stageNumber] = true;
+
+            storyWindow.SetActive(false);
+        }
     }
 
-    private async UniTask TypingEffect()
+    private async UniTask TypingEffect(string[] strings)
     {
-        int length = story.Length;
+        int length = strings.Length;
         var sb = new StringBuilder();
         int num = 0;
         endStory = false;
@@ -44,15 +66,13 @@ public class UITypingEffect : MonoBehaviour
                     text.text = sb.ToString();
                     await UniTask.WaitForSeconds(0.15f);
                 }
-                await UniTask.WaitForSeconds(1);
 
                 for(int i = story[num].Length - 1; i >= 0; i--)
                 {
                     sb[i] = ' ';
                     text.text = sb.ToString();
-                    await UniTask.WaitForSeconds(0.125f);
+                    await UniTask.WaitForSeconds(0.05f);
                 }
-                await UniTask.WaitForSeconds(1);
             }
             else
             {
@@ -61,5 +81,15 @@ public class UITypingEffect : MonoBehaviour
             num++;
         }
         await UniTask.Yield();
+    }
+
+    public void Pause()
+    {
+        Time.timeScale = 0f;
+    }
+
+    public void UnPause()
+    {
+        Time.timeScale = 1f;
     }
 }

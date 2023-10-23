@@ -6,7 +6,6 @@ using UnityEngine;
 
 public partial class GameManager //.Save
 {
-    Story storyData = new Story();
     //만약 스토리 저장 파일이 삭제 되었거나 변형 되었을때를 위한 백업 본
     private void SaveStory()
     {
